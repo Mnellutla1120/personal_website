@@ -1,7 +1,7 @@
 body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #EFB6C8; /* Light blush pink background */
+  margin: 10;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #000000; /* Light blush pink background */
 }
 
 .homepage-container {
@@ -11,7 +11,7 @@ body {
   gap: 60px;
   justify-content: center;
   align-items: flex-start;
-  background-color: #A888B5; /* Lavender background for section */
+  background-color: #492258; /* Lavender background for section */
   min-height: 100vh;
 }
 
@@ -33,28 +33,103 @@ body {
   font-size: 28px;
   margin-top: 20px;
   margin-bottom: 10px;
-  color: #441752;
+  color: #fefdff;
 }
 
 .school, .major {
   font-size: 18px;
-  color: #57476E; /* Slightly darker purple for subtlety */
+  color: #ffffff; /* Slightly darker purple for subtlety */
   margin: 4px 0;
 }
 
 .right-column {
   max-width: 600px;
   font-size: 18px;
-  color: #2F1C3A; /* Dark plum-ish text for contrast */
+  color: #ffffff; /* Dark plum-ish text for contrast */
+  padding-left: 0;
+  margin-left: 0;
 }
 
 .right-column h2 {
   font-size: 26px;
   margin-bottom: 16px;
-  color: #441752;
+  color: #ffffff;
+  padding-left: 0;
+  margin-left: 0;
 }
 
 .right-column p {
   margin-bottom: 16px;
   line-height: 1.6;
+}
+.typing-line {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: none;
+  font-family: 'Courier New', Courier, monospace;
+  animation: typing 3.5s steps(45, end) 1s forwards;
+  width: 0ch;
+}
+
+.typing-line .cursor {
+  display: inline-block;
+  animation: blink 0.75s step-end infinite, drop 1s ease-in 5s forwards;
+  opacity: 10;
+  color: #f6f2f2;
+}
+
+/* Typing animation: animate width in characters */
+@keyframes typing {
+  from {
+    width: 0ch;
+  }
+  to {
+    width: 45ch; /* Adjust to match actual character count */
+  }
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes drop {
+  to {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+}
+.homepage-container {
+  padding-top: 120px; /* pushes content below the navbar */
+}
+.fade-in {
+  animation: fadeInEffect 1s ease forwards;
+}
+
+@keyframes fadeInEffect {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.slide-in {
+  animation: slideInFromBottom 0.8s ease forwards;
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
