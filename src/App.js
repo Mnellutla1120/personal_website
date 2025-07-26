@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import profilePic from './profile.jpeg';
-import Navbar from './Navbar';
+import Navbar from './components/Navbar';
 
 function App() {
   const [animateIn, setAnimateIn] = useState(false);
