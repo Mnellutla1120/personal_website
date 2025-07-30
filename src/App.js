@@ -36,7 +36,18 @@ function App() {
             <span className="typed-text">Hope you have fun exploring this website :)</span>
             <span className="cursor"></span>
           </p>
+          <a
+   href="/Moukthika_s_Resume (1).pdf"
+   target="_blank"
+   rel="noopener noreferrer"
+   className="resume-cloud"
+   >
+   <i className="fa-solid fa-cloud cloud-icon"></i>
+   <span className="resume-text">Resume</span>
+ </a>
         </div>
+  
+
       </div>
     </>
   );

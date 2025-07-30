@@ -133,3 +133,73 @@ body {
     transform: translateY(0);
   }
 }
+.resume-cloud {
+  margin-top: 20px;
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  animation: float 6s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.cloud-icon {
+  font-size: 100px;
+  color: #B197FC;
+  position: absolute;
+  z-index: 0;
+}
+
+.resume-text {
+  font-weight: bold;
+  font-size: 18px;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+  margin-top: 50px;
+  padding: 0 10px;
+}
+
+/* Floating animation */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.resume-cloud:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+.cloud-icon {
+  text-shadow: 0 0 10px rgba(177, 151, 252, 0.5);
+}
+.resume-cloud {
+  position: relative;
+}
+
+.resume-cloud::after {
+  content: "Click to view my resume!";
+  position: absolute;
+  top: -30px;
+  background-color: #444;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.resume-cloud:hover::after {
+  opacity: 1;
+}
