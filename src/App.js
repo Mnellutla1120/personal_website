@@ -26,7 +26,7 @@ function App() {
           <h2>About Me</h2>
           <p>
             Hello! I am an undergraduate student who is deeply interested in the computational aspect of healthcare and clinical practice.
-            I leverage the skills I accumulate during my time in college and beyond to prepare for a career combining these two pivotal fields.
+            I leverage the skills I accumulate during my time in college and beyond to prepare for a career combining healthcare and technology.
           </p>
           <p>
             Outside of academics, I enjoy reading (I would love for some book recommendations), trying out new things, and taking long walks
