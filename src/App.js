@@ -26,7 +26,7 @@ function App() {
           <h2>About Me</h2>
           <p>
             Hello! I am an undergraduate student who is deeply interested in the computational aspect of healthcare and clinical practice.
-            I leverage the skills I accumulate during my time in college and beyond to prepare for a career as a physician-engineer.
+            I leverage the skills I accumulate during my time in college and beyond to prepare for a career combining these two pivotal fields.
           </p>
           <p>
             Outside of academics, I enjoy reading (I would love for some book recommendations), trying out new things, and taking long walks
@@ -37,7 +37,7 @@ function App() {
             <span className="cursor"></span>
           </p>
           <a
-   href="/Moukthika_s_Resume (1).pdf"
+   href="/Moukthika_s_Resume.pdf"
    target="_blank"
    rel="noopener noreferrer"
    className="resume-cloud"
