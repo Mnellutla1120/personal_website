@@ -1,1 +1,4 @@
-Clone the repo and use npm start to run my personal website! (Yet to be published into an accessible link).
+Visit this! 
+https://personal-website-six-azure-33.vercel.app/
+
+
