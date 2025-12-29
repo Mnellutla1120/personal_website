@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import projectsData from '../data/projects.json';
 import './Projects.css';
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
@@ -13,19 +15,30 @@ export default function Projects() {
     demo: ''
   });
 
+  // Load from JSON file on mount
   useEffect(() => {
-    const savedProjects = localStorage.getItem('projects');
-    if (savedProjects) {
-      setProjects(JSON.parse(savedProjects));
-    }
-    // Load edit mode state
+    setProjects(projectsData);
+    // Load edit mode state from localStorage
     const savedEditMode = localStorage.getItem('projectsEditMode');
     if (savedEditMode === 'true') {
       setEditMode(true);
+      // If in edit mode, check for localStorage overrides
+      const localProjects = localStorage.getItem('projects');
+      if (localProjects) {
+        try {
+          const parsed = JSON.parse(localProjects);
+          if (parsed.length > 0 || projectsData.length === 0) {
+            setProjects(parsed);
+          }
+        } catch (e) {
+          // Invalid JSON, use file data
+        }
+      }
     }
   }, []);
 
   const saveProjects = (newProjects) => {
+    // Save to localStorage for preview in edit mode
     localStorage.setItem('projects', JSON.stringify(newProjects));
     setProjects(newProjects);
   };
@@ -39,6 +52,8 @@ export default function Projects() {
       setShowForm(false);
       setEditingId(null);
       setFormData({ title: '', description: '', github: '', demo: '' });
+      // Reload from JSON file when exiting edit mode
+      setProjects(projectsData);
     }
   };
 
@@ -93,23 +108,52 @@ export default function Projects() {
     }
   };
 
+  const handleExport = () => {
+    setShowExportModal(true);
+  };
+
+  const handleCopyJSON = () => {
+    const jsonString = JSON.stringify(projects, null, 2);
+    navigator.clipboard.writeText(jsonString).then(() => {
+      alert('JSON copied to clipboard! Paste it into src/data/projects.json');
+    });
+  };
+
+  const handleDownloadJSON = () => {
+    const jsonString = JSON.stringify(projects, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'projects.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="projects-container">
       <div className="projects-header">
         <h1>My Projects</h1>
         <div className="header-buttons">
           {editMode && (
-            <button className="add-btn" onClick={() => {
-              if (showForm && !editingId) {
-                handleCancel();
-              } else {
-                setEditingId(null);
-                setFormData({ title: '', description: '', github: '', demo: '' });
-                setShowForm(!showForm);
-              }
-            }}>
-              {showForm && !editingId ? 'Cancel' : '+ Add Project'}
-            </button>
+            <>
+              <button className="add-btn" onClick={() => {
+                if (showForm && !editingId) {
+                  handleCancel();
+                } else {
+                  setEditingId(null);
+                  setFormData({ title: '', description: '', github: '', demo: '' });
+                  setShowForm(!showForm);
+                }
+              }}>
+                {showForm && !editingId ? 'Cancel' : '+ Add Project'}
+              </button>
+              <button className="export-btn" onClick={handleExport}>
+                💾 Export JSON
+              </button>
+            </>
           )}
           <button 
             className={`edit-mode-btn ${editMode ? 'active' : ''}`} 
@@ -119,6 +163,21 @@ export default function Projects() {
           </button>
         </div>
       </div>
+
+      {showExportModal && (
+        <div className="modal-overlay" onClick={() => setShowExportModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Export Projects JSON</h2>
+            <p>Copy this JSON and paste it into <code>src/data/projects.json</code> to save your changes permanently.</p>
+            <pre className="json-preview">{JSON.stringify(projects, null, 2)}</pre>
+            <div className="modal-buttons">
+              <button className="copy-btn" onClick={handleCopyJSON}>Copy to Clipboard</button>
+              <button className="download-btn" onClick={handleDownloadJSON}>Download JSON</button>
+              <button className="close-btn" onClick={() => setShowExportModal(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showForm && editMode && (
         <form className="project-form" onSubmit={handleSubmit}>
@@ -158,6 +217,7 @@ export default function Projects() {
               </button>
             )}
           </div>
+          <p className="form-note-edit">💡 Remember to export and update the JSON file to save permanently!</p>
         </form>
       )}
 

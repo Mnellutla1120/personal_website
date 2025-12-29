@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import blogPostsData from '../data/blogPosts.json';
 import './Blog.css';
 
 export default function Blog() {
   const [blogPosts, setBlogPosts] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
@@ -11,19 +13,30 @@ export default function Blog() {
     content: ''
   });
 
+  // Load from JSON file on mount
   useEffect(() => {
-    const savedPosts = localStorage.getItem('blogPosts');
-    if (savedPosts) {
-      setBlogPosts(JSON.parse(savedPosts));
-    }
-    // Load edit mode state
+    setBlogPosts(blogPostsData);
+    // Load edit mode state from localStorage
     const savedEditMode = localStorage.getItem('blogEditMode');
     if (savedEditMode === 'true') {
       setEditMode(true);
+      // If in edit mode, check for localStorage overrides
+      const localPosts = localStorage.getItem('blogPosts');
+      if (localPosts) {
+        try {
+          const parsed = JSON.parse(localPosts);
+          if (parsed.length > 0 || blogPostsData.length === 0) {
+            setBlogPosts(parsed);
+          }
+        } catch (e) {
+          // Invalid JSON, use file data
+        }
+      }
     }
   }, []);
 
   const savePosts = (newPosts) => {
+    // Save to localStorage for preview in edit mode
     localStorage.setItem('blogPosts', JSON.stringify(newPosts));
     setBlogPosts(newPosts);
   };
@@ -37,6 +50,8 @@ export default function Blog() {
       setShowForm(false);
       setEditingId(null);
       setFormData({ title: '', content: '' });
+      // Reload from JSON file when exiting edit mode
+      setBlogPosts(blogPostsData);
     }
   };
 
@@ -100,23 +115,52 @@ export default function Blog() {
     }
   };
 
+  const handleExport = () => {
+    setShowExportModal(true);
+  };
+
+  const handleCopyJSON = () => {
+    const jsonString = JSON.stringify(blogPosts, null, 2);
+    navigator.clipboard.writeText(jsonString).then(() => {
+      alert('JSON copied to clipboard! Paste it into src/data/blogPosts.json');
+    });
+  };
+
+  const handleDownloadJSON = () => {
+    const jsonString = JSON.stringify(blogPosts, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'blogPosts.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="blog-container">
       <div className="blog-header">
         <h1>My Blog</h1>
         <div className="header-buttons">
           {editMode && (
-            <button className="add-btn" onClick={() => {
-              if (showForm && !editingId) {
-                handleCancel();
-              } else {
-                setEditingId(null);
-                setFormData({ title: '', content: '' });
-                setShowForm(!showForm);
-              }
-            }}>
-              {showForm && !editingId ? 'Cancel' : '+ Add Blog Entry'}
-            </button>
+            <>
+              <button className="add-btn" onClick={() => {
+                if (showForm && !editingId) {
+                  handleCancel();
+                } else {
+                  setEditingId(null);
+                  setFormData({ title: '', content: '' });
+                  setShowForm(!showForm);
+                }
+              }}>
+                {showForm && !editingId ? 'Cancel' : '+ Add Blog Entry'}
+              </button>
+              <button className="export-btn" onClick={handleExport}>
+                💾 Export JSON
+              </button>
+            </>
           )}
           <button 
             className={`edit-mode-btn ${editMode ? 'active' : ''}`} 
@@ -126,6 +170,21 @@ export default function Blog() {
           </button>
         </div>
       </div>
+
+      {showExportModal && (
+        <div className="modal-overlay" onClick={() => setShowExportModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Export Blog Posts JSON</h2>
+            <p>Copy this JSON and paste it into <code>src/data/blogPosts.json</code> to save your changes permanently.</p>
+            <pre className="json-preview">{JSON.stringify(blogPosts, null, 2)}</pre>
+            <div className="modal-buttons">
+              <button className="copy-btn" onClick={handleCopyJSON}>Copy to Clipboard</button>
+              <button className="download-btn" onClick={handleDownloadJSON}>Download JSON</button>
+              <button className="close-btn" onClick={() => setShowExportModal(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showForm && editMode && (
         <form className="blog-form" onSubmit={handleSubmit}>
@@ -157,6 +216,7 @@ export default function Blog() {
               </button>
             )}
           </div>
+          <p className="form-note-edit">💡 Remember to export and update the JSON file to save permanently!</p>
         </form>
       )}
 

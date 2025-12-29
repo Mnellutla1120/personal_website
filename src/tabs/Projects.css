@@ -277,5 +277,140 @@
   padding: 40px;
 }
 
+.export-btn {
+  background-color: #10b981;
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-family: 'Courier New', Courier, monospace;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+  background-color: #059669;
+  transform: scale(1.05);
+}
+
+.form-note-edit {
+  color: #B197FC;
+  font-size: 14px;
+  margin-top: 16px;
+  font-style: italic;
+  text-align: center;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background-color: #441752;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content h2 {
+  color: #ffffff;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.modal-content p {
+  color: #f6f2f2;
+  margin-bottom: 20px;
+}
+
+.modal-content code {
+  background-color: #492258;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #B197FC;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.json-preview {
+  background-color: #000000;
+  color: #10b981;
+  padding: 20px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.copy-btn,
+.download-btn,
+.close-btn {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-family: 'Courier New', Courier, monospace;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.copy-btn {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+.copy-btn:hover {
+  background-color: #059669;
+  transform: scale(1.05);
+}
+
+.download-btn {
+  background-color: #B197FC;
+  color: #000000;
+}
+
+.download-btn:hover {
+  background-color: #caa6f7;
+  transform: scale(1.05);
+}
+
+.close-btn {
+  background-color: #6b7280;
+  color: #ffffff;
+}
+
+.close-btn:hover {
+  background-color: #9ca3af;
+  transform: scale(1.05);
+}
+
 
 

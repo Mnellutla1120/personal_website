@@ -1,0 +1,35 @@
+[
+    {
+      "id": 1766970634783,
+      "title": "Flowmodoro",
+      "description": "Made my own simple one to deal with the choice dilemma :)",
+      "github": "",
+      "demo": "",
+      "createdAt": "2025-12-29T01:10:34.783Z"
+    },
+    {
+      "id": 1766970703564,
+      "title": "Futurenomics",
+      "description": "Predicting future health expenditure based on country GDP",
+      "github": "",
+      "demo": "",
+      "createdAt": "2025-12-29T01:11:43.564Z"
+    },
+    {
+      "id": 1766970759547,
+      "title": "Bookrates",
+      "description": "A book recommender using collaborative and content-based filtering utilizing the GoodReads API.",
+      "github": "",
+      "demo": "",
+      "createdAt": "2025-12-29T01:12:39.547Z"
+    },
+    {
+      "id": 1766970794482,
+      "title": "Email Generator",
+      "description": "Send emails to others curated by our Gemini wrapper ",
+      "github": "",
+      "demo": "",
+      "createdAt": "2025-12-29T01:13:14.482Z"
+    }
+  ]
+
