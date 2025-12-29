@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import blogPostsData from '../data/blogPosts.json';
+import { EDIT_MODE_PASSWORD } from '../config/password';
 import './Blog.css';
 
 export default function Blog() {
   const [blogPosts, setBlogPosts] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
@@ -41,17 +45,35 @@ export default function Blog() {
     setBlogPosts(newPosts);
   };
 
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (passwordInput === EDIT_MODE_PASSWORD) {
+      setEditMode(true);
+      setShowPasswordModal(false);
+      setPasswordInput('');
+      setPasswordError('');
+      localStorage.setItem('blogEditMode', 'true');
+    } else {
+      setPasswordError('Incorrect password. Access denied.');
+      setPasswordInput('');
+    }
+  };
+
   const toggleEditMode = () => {
-    const newEditMode = !editMode;
-    setEditMode(newEditMode);
-    localStorage.setItem('blogEditMode', newEditMode.toString());
-    // Reset form if disabling edit mode
-    if (!newEditMode) {
+    if (editMode) {
+      // If already in edit mode, just disable it
+      setEditMode(false);
+      localStorage.setItem('blogEditMode', 'false');
       setShowForm(false);
       setEditingId(null);
       setFormData({ title: '', content: '' });
       // Reload from JSON file when exiting edit mode
       setBlogPosts(blogPostsData);
+    } else {
+      // If not in edit mode, show password modal
+      setShowPasswordModal(true);
+      setPasswordInput('');
+      setPasswordError('');
     }
   };
 
@@ -170,6 +192,37 @@ export default function Blog() {
           </button>
         </div>
       </div>
+
+      {showPasswordModal && (
+        <div className="modal-overlay" onClick={() => setShowPasswordModal(false)}>
+          <div className="modal-content password-modal" onClick={(e) => e.stopPropagation()}>
+            <h2>🔒 Enter Password</h2>
+            <p>Enter the password to enable edit mode.</p>
+            <form onSubmit={handlePasswordSubmit}>
+              <input
+                type="password"
+                placeholder="Password"
+                value={passwordInput}
+                onChange={(e) => {
+                  setPasswordInput(e.target.value);
+                  setPasswordError('');
+                }}
+                className="password-input"
+                autoFocus
+              />
+              {passwordError && <p className="password-error">{passwordError}</p>}
+              <div className="modal-buttons">
+                <button type="submit" className="submit-btn">Submit</button>
+                <button type="button" className="close-btn" onClick={() => {
+                  setShowPasswordModal(false);
+                  setPasswordInput('');
+                  setPasswordError('');
+                }}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {showExportModal && (
         <div className="modal-overlay" onClick={() => setShowExportModal(false)}>

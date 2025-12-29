@@ -1,247 +1,141 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import contactData from '../data/contactInfo.json';
 import './Contact.css';
 
 export default function Contact() {
-  const [socials, setSocials] = useState({
+  const [formData, setFormData] = useState({
+    name: '',
     email: '',
-    linkedin: '',
-    github: '',
-    twitter: '',
-    instagram: '',
-    website: ''
+    message: ''
   });
-  const [showExportModal, setShowExportModal] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-
-  // Load from JSON file on mount
-  useEffect(() => {
-    setSocials(contactData);
-    // Load edit mode state from localStorage
-    const savedEditMode = localStorage.getItem('contactEditMode');
-    if (savedEditMode === 'true') {
-      setEditMode(true);
-      // If in edit mode, check for localStorage overrides
-      const localSocials = localStorage.getItem('contactSocials');
-      if (localSocials) {
-        try {
-          const parsed = JSON.parse(localSocials);
-          setSocials(parsed);
-        } catch (e) {
-          // Invalid JSON, use file data
-        }
-      }
-    }
-  }, []);
-
-  const toggleEditMode = () => {
-    const newEditMode = !editMode;
-    setEditMode(newEditMode);
-    localStorage.setItem('contactEditMode', newEditMode.toString());
-    if (!newEditMode) {
-      // Reload from JSON file when exiting edit mode
-      setSocials(contactData);
-    }
-  };
+  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setSocials(prev => {
-      const updated = { ...prev, [name]: value };
-      // Save to localStorage for preview in edit mode
-      localStorage.setItem('contactSocials', JSON.stringify(updated));
-      return updated;
-    });
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleExport = () => {
-    setShowExportModal(true);
-  };
-
-  const handleCopyJSON = () => {
-    const jsonString = JSON.stringify(socials, null, 2);
-    navigator.clipboard.writeText(jsonString).then(() => {
-      alert('JSON copied to clipboard! Paste it into src/data/contactInfo.json');
-    });
-  };
-
-  const handleDownloadJSON = () => {
-    const jsonString = JSON.stringify(socials, null, 2);
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'contactInfo.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { name, email, message } = formData;
+    
+    // Create mailto link with subject and body
+    const subject = encodeURIComponent(`Message from ${name || 'Website Visitor'}`);
+    const body = encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+    );
+    const mailtoLink = `mailto:${contactData.email}?subject=${subject}&body=${body}`;
+    
+    // Open email client
+    window.location.href = mailtoLink;
+    setSubmitted(true);
+    
+    // Reset form after a delay
+    setTimeout(() => {
+      setFormData({ name: '', email: '', message: '' });
+      setSubmitted(false);
+    }, 3000);
   };
 
   return (
     <div className="contact-container">
       <div className="contact-header">
         <h1>Contact Me</h1>
-        <div className="header-buttons">
-          {editMode && (
-            <button className="export-btn" onClick={handleExport}>
-              💾 Export JSON
-            </button>
-          )}
-          <button 
-            className={`edit-mode-btn ${editMode ? 'active' : ''}`} 
-            onClick={toggleEditMode}
-          >
-            {editMode ? '✏️ Edit Mode ON' : '🔒 Edit Mode OFF'}
-          </button>
-        </div>
-        {editMode && (
-          <p className="subtitle">Edit your information below. Remember to export and update the JSON file!</p>
-        )}
-        {!editMode && (
-          <p className="subtitle">Get in touch with me through these platforms</p>
-        )}
+        <p className="subtitle">Send me a message and I'll get back to you!</p>
       </div>
 
-      {showExportModal && (
-        <div className="modal-overlay" onClick={() => setShowExportModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Export Contact Info JSON</h2>
-            <p>Copy this JSON and paste it into <code>src/data/contactInfo.json</code> to save your changes permanently.</p>
-            <pre className="json-preview">{JSON.stringify(socials, null, 2)}</pre>
-            <div className="modal-buttons">
-              <button className="copy-btn" onClick={handleCopyJSON}>Copy to Clipboard</button>
-              <button className="download-btn" onClick={handleDownloadJSON}>Download JSON</button>
-              <button className="close-btn" onClick={() => setShowExportModal(false)}>Close</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <form className="contact-form">
+      <form className="contact-form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="name">Your Name *</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="John Doe"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="email">Your Email *</label>
           <input
             type="email"
             id="email"
             name="email"
             placeholder="your.email@example.com"
-            value={socials.email}
+            value={formData.email}
             onChange={handleChange}
-            disabled={!editMode}
+            required
           />
         </div>
 
         <div className="form-group">
-          <label htmlFor="linkedin">LinkedIn</label>
-          <input
-            type="url"
-            id="linkedin"
-            name="linkedin"
-            placeholder="https://linkedin.com/in/yourprofile"
-            value={socials.linkedin}
+          <label htmlFor="message">Message *</label>
+          <textarea
+            id="message"
+            name="message"
+            placeholder="Write your message here..."
+            value={formData.message}
             onChange={handleChange}
-            disabled={!editMode}
+            rows="8"
+            required
           />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="github">GitHub</label>
-          <input
-            type="url"
-            id="github"
-            name="github"
-            placeholder="https://github.com/yourusername"
-            value={socials.github}
-            onChange={handleChange}
-            disabled={!editMode}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="twitter">Twitter/X</label>
-          <input
-            type="url"
-            id="twitter"
-            name="twitter"
-            placeholder="https://twitter.com/yourusername"
-            value={socials.twitter}
-            onChange={handleChange}
-            disabled={!editMode}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="instagram">Instagram</label>
-          <input
-            type="url"
-            id="instagram"
-            name="instagram"
-            placeholder="https://instagram.com/yourusername"
-            value={socials.instagram}
-            onChange={handleChange}
-            disabled={!editMode}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="website">Personal Website</label>
-          <input
-            type="url"
-            id="website"
-            name="website"
-            placeholder="https://yourwebsite.com"
-            value={socials.website}
-            onChange={handleChange}
-            disabled={!editMode}
-          />
-        </div>
-        {editMode && (
-          <p className="form-note-edit">💡 Remember to export and update the JSON file to save permanently!</p>
+        {submitted && (
+          <div className="success-message">
+            ✓ Opening your email client to send the message!
+          </div>
         )}
+
+        <button type="submit" className="submit-btn">
+          📧 Send Message
+        </button>
       </form>
 
       <div className="social-links-preview">
-        <h2>Contact Links</h2>
+        <h2>Or find me on</h2>
         <div className="links-grid">
-          {socials.email && (
-            <a href={`mailto:${socials.email}`} className="social-link email">
+          {contactData.email && (
+            <a href={`mailto:${contactData.email}`} className="social-link email">
               <span className="link-icon">✉</span>
               <span className="link-text">Email</span>
             </a>
           )}
-          {socials.linkedin && (
-            <a href={socials.linkedin} target="_blank" rel="noopener noreferrer" className="social-link linkedin">
+          {contactData.linkedin && (
+            <a href={contactData.linkedin} target="_blank" rel="noopener noreferrer" className="social-link linkedin">
               <span className="link-icon">💼</span>
               <span className="link-text">LinkedIn</span>
             </a>
           )}
-          {socials.github && (
-            <a href={socials.github} target="_blank" rel="noopener noreferrer" className="social-link github">
+          {contactData.github && (
+            <a href={contactData.github} target="_blank" rel="noopener noreferrer" className="social-link github">
               <span className="link-icon">🔗</span>
               <span className="link-text">GitHub</span>
             </a>
           )}
-          {socials.twitter && (
-            <a href={socials.twitter} target="_blank" rel="noopener noreferrer" className="social-link twitter">
+          {contactData.twitter && (
+            <a href={contactData.twitter} target="_blank" rel="noopener noreferrer" className="social-link twitter">
               <span className="link-icon">🐦</span>
               <span className="link-text">Twitter</span>
             </a>
           )}
-          {socials.instagram && (
-            <a href={socials.instagram} target="_blank" rel="noopener noreferrer" className="social-link instagram">
+          {contactData.instagram && (
+            <a href={contactData.instagram} target="_blank" rel="noopener noreferrer" className="social-link instagram">
               <span className="link-icon">📷</span>
               <span className="link-text">Instagram</span>
             </a>
           )}
-          {socials.website && (
-            <a href={socials.website} target="_blank" rel="noopener noreferrer" className="social-link website">
+          {contactData.website && (
+            <a href={contactData.website} target="_blank" rel="noopener noreferrer" className="social-link website">
               <span className="link-icon">🌐</span>
               <span className="link-text">Website</span>
             </a>
-          )}
-          {Object.values(socials).every(val => !val) && (
-            <p className="empty-preview">No contact information available.</p>
           )}
         </div>
       </div>

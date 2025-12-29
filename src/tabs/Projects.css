@@ -412,5 +412,35 @@
   transform: scale(1.05);
 }
 
+.password-modal {
+  max-width: 400px;
+}
+
+.password-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #B197FC;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #000000;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 16px;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+.password-input:focus {
+  outline: none;
+  border-color: #caa6f7;
+}
+
+.password-error {
+  color: #ef4444;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
 
 
