@@ -3,32 +3,32 @@
       "id": 1766970634783,
       "title": "Flowmodoro",
       "description": "Made my own simple one to deal with the choice dilemma :)",
-      "github": "",
-      "demo": "",
+      "github": "https://github.com/Mnellutla1120/pomodoro-app.git",
+      "demo": "https://pomodoro-app-nine-sable.vercel.app/",
       "createdAt": "2025-12-29T01:10:34.783Z"
     },
     {
       "id": 1766970703564,
       "title": "Futurenomics",
       "description": "Predicting future health expenditure based on country GDP",
-      "github": "",
-      "demo": "",
+      "github": "https://github.com/Mnellutla1120/FutureNomics.git",
+      "demo": "https://futurenomics-wuxeuupqlakdtcpnovsm5k.streamlit.app/",
       "createdAt": "2025-12-29T01:11:43.564Z"
     },
     {
       "id": 1766970759547,
       "title": "Bookrates",
       "description": "A book recommender using collaborative and content-based filtering utilizing the GoodReads API.",
-      "github": "",
-      "demo": "",
+      "github": "https://github.com/k4tie113/book_rec_site.git",
+      "demo": "https://bookrates.vercel.app/", 
       "createdAt": "2025-12-29T01:12:39.547Z"
     },
     {
       "id": 1766970794482,
       "title": "Email Generator",
       "description": "Send emails to others curated by our Gemini wrapper ",
-      "github": "",
-      "demo": "",
+      "github": "https://github.com/CS222-UIUC/fa25-fa25-team019-CM3.git",
+      "demo": "https://mediaspace.illinois.edu/media/t/1_kde7q6og",
       "createdAt": "2025-12-29T01:13:14.482Z"
     }
   ]
