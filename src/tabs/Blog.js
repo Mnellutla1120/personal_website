@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import blogPostsData from '../data/blogPosts.json';
 import './Blog.css';
 
 export default function Blog() {
+  const [fadeIn, setFadeIn] = useState(false);
+
+  useEffect(() => {
+    setFadeIn(true);
+  }, []);
+
   return (
-    <div className="blog-container">
+    <div className={`blog-container ${fadeIn ? 'fade-in' : ''}`}>
       <div className="blog-header">
         <h1>My Blog</h1>
       </div>

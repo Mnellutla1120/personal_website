@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import contactData from '../data/contactInfo.json';
 import './Contact.css';
 
@@ -40,8 +40,14 @@ export default function Contact() {
     }, 3000);
   };
 
+  const [fadeIn, setFadeIn] = useState(false);
+
+  useEffect(() => {
+    setFadeIn(true);
+  }, []);
+
   return (
-    <div className="contact-container">
+    <div className={`contact-container ${fadeIn ? 'fade-in' : ''}`}>
       <div className="contact-header">
         <h1>Contact Me</h1>
         <p className="subtitle">Send me a message and I'll get back to you!</p>

@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import projectsData from '../data/projects.json';
 import './Projects.css';
 
 export default function Projects() {
+  const [fadeIn, setFadeIn] = useState(false);
+
+  useEffect(() => {
+    setFadeIn(true);
+  }, []);
+
   return (
-    <div className="projects-container">
+    <div className={`projects-container ${fadeIn ? 'fade-in' : ''}`}>
       <div className="projects-header">
         <h1>My Projects</h1>
       </div>

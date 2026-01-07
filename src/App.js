@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import profilePic from './profile.jpeg';
@@ -6,6 +6,39 @@ import Navbar from './components/Navbar';
 import Projects from "./tabs/Projects";
 import Blog from "./tabs/Blog";
 import Contact from "./tabs/Contact";
+
+function AnimatedRoutes() {
+  const location = useLocation();
+  const [displayLocation, setDisplayLocation] = useState(location);
+  const [transitionStage, setTransitionStage] = useState("fadeIn");
+
+  useEffect(() => {
+    if (location !== displayLocation) {
+      setTransitionStage("fadeOut");
+    }
+  }, [location, displayLocation]);
+
+  useEffect(() => {
+    if (transitionStage === "fadeOut") {
+      const timer = setTimeout(() => {
+        setDisplayLocation(location);
+        setTransitionStage("fadeIn");
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [transitionStage, location]);
+
+  return (
+    <div className={`page-wrapper ${transitionStage}`}>
+      <Routes location={displayLocation}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </div>
+  );
+}
 
 function HomePage() {
   const [animateIn, setAnimateIn] = useState(false);
@@ -52,19 +85,20 @@ function HomePage() {
   );
 }
 
-function App() {
+function AppContent() {
   return (
     <>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-      </Router>
+      <Navbar />
+      <AnimatedRoutes />
     </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 
