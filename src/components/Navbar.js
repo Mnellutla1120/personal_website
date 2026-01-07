@@ -34,7 +34,13 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      Moukthika Nellutla
+      <div className="navbar-logo">
+        <svg className="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="48" fill="#B197FC" />
+          <text x="50" y="70" fontFamily="Courier New, monospace" fontSize="60" fontWeight="bold" fill="#000000" textAnchor="middle">MN</text>
+        </svg>
+        <span>Moukthika Nellutla</span>
+      </div>
 
       <ul className="navbar-links">
         <li>
