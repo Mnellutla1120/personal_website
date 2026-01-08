@@ -31,5 +31,14 @@
       "demo": "https://mediaspace.illinois.edu/media/t/1_kde7q6og",
       "createdAt": "2025-12-29T01:13:14.482Z"
     }
+    {
+    "id": 1767830660170,
+    "title": "Demynsify",
+    "description": "The GPTZero for medical misinformation.",
+    "github": "https://github.com/Mnellutla1120/demynsify",
+    "demo": "https://demynsify.vercel.app/",
+    "createdAt": "2026-01-08T00:04:20.170Z"
+}
+
   ]
 
